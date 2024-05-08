@@ -1,43 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Box } from '@mui/material';
+import { TextField, Button, IconButton, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { v4 as uuidv4 } from 'uuid';
+import { Reorder } from "framer-motion";
+import '../style/todoList.css';
 
 type Todo = {
-    id: number;
+    id: string;
     text: string;
 };
 
 const TodoList: React.FC = () => {
     const [todos, setTodos] = useState<Todo[]>(JSON.parse(localStorage.getItem('todos') || '[]'));
     const [inputText, setInputText] = useState<string>('');
-    const [idCounter, setIdCounter] = useState<number>(JSON.parse(localStorage.getItem('idCounter') || '1'));
-    const [editingTodoId, setEditingTodoId] = useState<number | null>(null);
+    const [editingTodoId, setEditingTodoId] = useState<string | null>(null);
     const [editText, setEditText] = useState<string>('');
 
     useEffect(() => {
         localStorage.setItem('todos', JSON.stringify(todos));
-        localStorage.setItem('idCounter', JSON.stringify(idCounter));
-    }, [todos, idCounter]);
+    }, [todos]);
+
+    const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>, id: string) => {
+        if (e.key === 'Enter') {
+            handleSaveEditTodo(id);
+        }
+    };
 
     const handleAddTodo = () => {
         if (inputText.trim() !== '') {
             const newTodo: Todo = {
-                id: idCounter,
+                id: uuidv4(),
                 text: inputText,
             };
             setTodos([...todos, newTodo]);
             setInputText('');
-            setIdCounter(idCounter + 1); // Increment ID counter
         }
     };
 
-    const handleDeleteTodo = (id: number) => {
+    const handleDeleteTodo = (id: string) => {
         const updatedTodos = todos.filter(todo => todo.id !== id);
         setTodos(updatedTodos);
     };
 
-    const handleEditTodo = (id: number) => {
+    const handleEditTodo = (id: string) => {
         const todoToEdit = todos.find(todo => todo.id === id);
         if (todoToEdit) {
             setEditingTodoId(id);
@@ -45,7 +51,7 @@ const TodoList: React.FC = () => {
         }
     };
 
-    const handleSaveEditTodo = (id: number) => {
+    const handleSaveEditTodo = (id: string) => {
         const updatedTodos = todos.map(todo => {
             if (todo.id === id) {
                 return {
@@ -63,14 +69,8 @@ const TodoList: React.FC = () => {
         setEditingTodoId(null);
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>, id: number) => {
-        if (e.key === 'Enter') {
-            handleSaveEditTodo(id);
-        }
-    };
-
     return (
-        <Box sx={{ textAlign: 'center', padding: '20px', backgroundColor: '#ffffcc', borderRadius: '10px' }}>
+        <Box sx={{ textAlign: 'center', padding: '20px', borderRadius: '10px' }} >
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
                 <TextField
                     label="Add Todo"
@@ -81,58 +81,55 @@ const TodoList: React.FC = () => {
                             handleAddTodo();
                         }
                     }}
-                    sx={{ width: '300px', marginRight: '1rem', height: '56px', backgroundColor: '#ffffcc' }}
+                    sx={{ width: '300px', marginRight: '1rem', height: '56px' }}
                 />
                 <Button variant="contained" onClick={handleAddTodo} sx={{ height: '56px' }}>
                     Add
                 </Button>
             </Box>
-            <List sx={{ backgroundColor: '#ffffcc', borderRadius: '5px', padding: '10px' }}>
+            <Reorder.Group values={todos} onReorder={setTodos} axis="y">
                 {todos.map(todo => (
-                    <ListItem key={todo.id} sx={{ borderBottom: '1px solid #aaa' }}>
-                        {editingTodoId === todo.id ? (
-                            <>
-                                <TextField
-                                    value={editText}
-                                    onChange={(e) => setEditText(e.target.value)}
-                                    onKeyPress={(e) => handleKeyPress(e, todo.id)}
-                                    sx={{ width: '300px', mr: '1rem', height: '56px', backgroundColor: '#ffffcc' }}
-                                />
-                                <Button variant='outlined' sx={{ mr: '1rem', height: '56px' }} onClick={() => handleSaveEditTodo(todo.id)}>Save</Button>
-                                <Button variant='outlined' sx={{ mr: '1rem', height: '56px' }} onClick={handleCancelEdit}>Cancel</Button>
-                            </>
-                        ) : (
-                            <>
-                                <ListItemText primary={todo.text} />
-                                <ListItemSecondaryAction>
-                                    <IconButton
-                                        onClick={() => handleEditTodo(todo.id)}
-                                        sx={{
-                                            '&:hover': {
-                                                color: 'blue'
-                                            }
-                                        }}
-                                    >
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        onClick={() => handleDeleteTodo(todo.id)}
-                                        sx={{
-                                            '&:hover': {
-                                                color: 'red'
-                                            }
-                                        }}
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </>
-                        )}
-                    </ListItem>
+                    <Reorder.Item key={todo.id} id={todo.id} value={todo} >
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }} >
+
+                            {editingTodoId === todo.id ? (
+                                <>
+                                    <Box sx={{ flex: 1, textAlign: 'left' }}>
+                                        <TextField
+                                            value={editText}
+                                            onChange={(e) => setEditText(e.target.value)}
+                                            onKeyPress={(e) => handleKeyPress(e, todo.id)}
+                                            sx={{ width: '300px', mr: '1rem', height: '56px' }}
+                                        />
+                                    </Box>
+                                    <Box>
+                                        <Button variant='outlined' sx={{ mr: '1rem', height: '56px' }} onClick={() => handleSaveEditTodo(todo.id)}>Save</Button>
+                                        <Button variant='outlined' sx={{ mr: '1rem', height: '56px' }} onClick={handleCancelEdit}>Cancel</Button>
+                                    </Box>
+                                </>
+                            ) : (
+                                <>
+                                    <Box sx={{ flex: 1, textAlign: 'left' }}>{todo.text}</Box>
+                                    <Box>
+                                        <IconButton onClick={() => handleEditTodo(todo.id)}>
+                                            <EditIcon sx={{ '&:hover': { color: 'blue' } }} />
+                                        </IconButton>
+                                        <IconButton onClick={() => handleDeleteTodo(todo.id)}>
+                                            <DeleteIcon sx={{ '&:hover': { color: 'red' } }} />
+                                        </IconButton>
+                                    </Box>
+                                </>
+                            )}
+                        </Box>
+                    </Reorder.Item>
                 ))}
-            </List>
+            </Reorder.Group>
         </Box>
     );
 };
 
 export default TodoList;
+
+
+
+
