@@ -1,0 +1,35 @@
+.todoItemContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.textInputContainer {
+    flex: 1;
+    text-align: left;
+}
+
+.textInput {
+    width: 300px;
+    margin-right: 1rem;
+    height: 56px;
+}
+
+.buttonEdit {
+    margin-right: 1rem;
+    height: 56px;
+}
+
+.textContainer {
+    flex: 1;
+    text-align: left;
+}
+
+.editButton:hover {
+    color: blue;
+}
+
+.deleteButton:hover {
+    color: red;
+}
