@@ -16,7 +16,7 @@
     height: 56px;
 }
 
-.buttonEdit {
+.todoItemContainer .buttonEdit {
     margin-right: 1rem;
     height: 56px;
 }
@@ -27,9 +27,9 @@
 }
 
 .editButton:hover {
-    color: blue;
+    color:#1976D2;
 }
 
 .deleteButton:hover {
-    color: red;
+    color: rgb(200, 0, 0);
 }
