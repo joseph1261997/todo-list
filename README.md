@@ -1,4 +1,4 @@
-### Todo List
+# Todo List
 
 Una semplice applicazione di una lista di cose da fare (Todo List) realizzata con React e TypeScript.
 
