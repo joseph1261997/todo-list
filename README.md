@@ -1,46 +1,54 @@
-# Getting Started with Create React App
+### Todo List
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Una semplice applicazione di una lista di cose da fare (Todo List) realizzata con React e TypeScript.
 
-## Available Scripts
+## Descrizione
 
-In the project directory, you can run:
+Questa applicazione consente agli utenti di aggiungere, eliminare e modificare i loro elementi della lista delle attività da fare.
 
-### `npm start`
+## Funzionalità
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- Aggiunta di nuovi elementi alla lista
+- Eliminazione di elementi dalla lista
+- Modifica di elementi esistenti nella lista
+- Riordinamento degli elementi della lista tramite trascinamento
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Utilizzo
 
-### `npm test`
+Per utilizzare l'applicazione in locale, segui questi passaggi:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository: `git clone https://https://github.com/joseph1261997/todo-list`
+2. Install dependencies: `npm install` or `yarn install`
+3. Run the application: `npm start` or `yarn start`
+4. Open the application in your web browser: `http://localhost:3000`
 
-### `npm run build`
+## Tecnologie Utilizzate
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* React
+* TypeScript
+* Material-UI
+* Framer Motion
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Struttura del Progetto
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+* src/components: Contiene i componenti React dell'applicazione.
+* src/styles: Contiene i file CSS per lo stile dei componenti.
+* src/utils: Contiene i tipi TypeScript e altre utility.
 
-### `npm run eject`
+**Components**
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+* `TodoList.tsx`: Il componente che visualizza la lista di cose da fare.
+* `TodoItem.tsx`: Il componente che visualizza un singolo elemento della lista di cose da fare.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Types**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+* `Todo`: Tipo per un elemento di elenco dei compiti, con le proprietà `id` e `text`
+* `TodoItemProps`: Tipo per le proprietà del componente
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Licenza
 
-## Learn More
+Questo progetto è licenziato sotto la licenza MIT.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contributing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+I contributi sono benvenuti! Se vuoi contribuire a questo progetto, apri un issue o invia un pull request.
