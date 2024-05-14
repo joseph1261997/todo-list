@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, IconButton, Box } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { v4 as uuidv4 } from 'uuid';
+import { Box, Button, TextField } from '@mui/material';
 import { Reorder } from "framer-motion";
-import '../style/todoList.css';
-
-type Todo = {
-    id: string;
-    text: string;
-};
+import TodoItem from './TodoItem';
+import { Todo } from '../utils/types';
+import { v4 as uuidv4 } from 'uuid';
+import styles from '../styles/TodoList.module.css';
 
 const TodoList: React.FC = () => {
     const [todos, setTodos] = useState<Todo[]>(JSON.parse(localStorage.getItem('todos') || '[]'));
@@ -70,8 +65,8 @@ const TodoList: React.FC = () => {
     };
 
     return (
-        <Box sx={{ textAlign: 'center', padding: '20px', borderRadius: '10px' }} >
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+        <Box className={styles.todoListContainer} >
+            <Box className={styles.todoListInputContainer}>
                 <TextField
                     label="Add Todo"
                     value={inputText}
@@ -81,46 +76,26 @@ const TodoList: React.FC = () => {
                             handleAddTodo();
                         }
                     }}
-                    sx={{ width: '300px', marginRight: '1rem', height: '56px' }}
+                    className={styles.todoListInput}
                 />
-                <Button variant="contained" onClick={handleAddTodo} sx={{ height: '56px' }}>
+                <Button variant="contained" onClick={handleAddTodo} className={styles.todoListButton}>
                     Add
                 </Button>
             </Box>
-            <Reorder.Group values={todos} onReorder={setTodos} axis="y">
+            <Reorder.Group values={todos} onReorder={setTodos} axis="y" className={styles.todoListReorderGroup}>
                 {todos.map(todo => (
-                    <Reorder.Item key={todo.id} id={todo.id} value={todo} >
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }} >
-
-                            {editingTodoId === todo.id ? (
-                                <>
-                                    <Box sx={{ flex: 1, textAlign: 'left' }}>
-                                        <TextField
-                                            value={editText}
-                                            onChange={(e) => setEditText(e.target.value)}
-                                            onKeyPress={(e) => handleKeyPress(e, todo.id)}
-                                            sx={{ width: '300px', mr: '1rem', height: '56px' }}
-                                        />
-                                    </Box>
-                                    <Box>
-                                        <Button variant='outlined' sx={{ mr: '1rem', height: '56px' }} onClick={() => handleSaveEditTodo(todo.id)}>Save</Button>
-                                        <Button variant='outlined' sx={{ mr: '1rem', height: '56px' }} onClick={handleCancelEdit}>Cancel</Button>
-                                    </Box>
-                                </>
-                            ) : (
-                                <>
-                                    <Box sx={{ flex: 1, textAlign: 'left' }}>{todo.text}</Box>
-                                    <Box>
-                                        <IconButton onClick={() => handleEditTodo(todo.id)}>
-                                            <EditIcon sx={{ '&:hover': { color: 'blue' } }} />
-                                        </IconButton>
-                                        <IconButton onClick={() => handleDeleteTodo(todo.id)}>
-                                            <DeleteIcon sx={{ '&:hover': { color: 'red' } }} />
-                                        </IconButton>
-                                    </Box>
-                                </>
-                            )}
-                        </Box>
+                    <Reorder.Item key={todo.id} id={todo.id} value={todo} className={styles.todoListReorderItem}>
+                        <TodoItem
+                            todo={todo}
+                            editing={editingTodoId === todo.id}
+                            editText={editText}
+                            onEdit={handleEditTodo}
+                            onDelete={handleDeleteTodo}
+                            onSaveEdit={handleSaveEditTodo}
+                            onCancelEdit={handleCancelEdit}
+                            onTextChange={setEditText}
+                            onKeyPress={handleKeyPress}
+                        />
                     </Reorder.Item>
                 ))}
             </Reorder.Group>
@@ -129,7 +104,3 @@ const TodoList: React.FC = () => {
 };
 
 export default TodoList;
-
-
-
-
